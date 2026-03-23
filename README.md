@@ -7,6 +7,10 @@
 
 ---
 
+## Uso de la IA
+- Corrección de errores en la carpeta routes/Usuario.ts y Joi.ts.
+- Generación de comentarios para ayudar a entender el código.
+
 ## Novedades de la Arquitectura
 
 Tras la última revisión, el proyecto ha evolucionado para cumplir con estándares de escalabilidad:
