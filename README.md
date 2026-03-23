@@ -8,6 +8,7 @@
 ---
 
 ## Uso de la IA
+- Se ha usado Gemini para ayudar a:
 - Corrección de errores en la carpeta routes/Usuario.ts y Joi.ts.
 - Generación de comentarios para ayudar a entender el código.
 
