@@ -2,7 +2,7 @@ import express from 'express';
 import controller from '../controllers/Usuario';
 import { Schemas, ValidateJoi } from '../middleware/Joi';
 
-import { authenticateToken } from '../middleware/auth';
+import { authenticateToken, authorizeRoles } from '../middleware/auth';
 
 const router = express.Router();
 
@@ -34,6 +34,10 @@ const router = express.Router();
  *           type: string
  *           description: ObjectId de la organización
  *           example: "65f1c2a1b2c3d4e5f6789013"
+ *         rol:
+ *           type: string
+ *           enum: [admin, user]
+ *           example: "user"
  *     UsuarioCreateUpdate:
  *       type: object
  *       required:
@@ -41,6 +45,7 @@ const router = express.Router();
  *         - organizacion
  *         - email
  *         - password
+ *         - rol
  *       properties:
  *         name:
  *           type: string
@@ -55,6 +60,10 @@ const router = express.Router();
  *           type: string
  *           description: ObjectId de la organización (24 hex)
  *           example: "65f1c2a1b2c3d4e5f6789013"
+ *         rol:
+ *           type: string
+ *           enum: [admin, user]
+ *           example: "user"
  */
 
 /**
@@ -98,7 +107,7 @@ router.post('/', ValidateJoi(Schemas.usuario.create), controller.createUsuario);
  *       404:
  *         description: No encontrado
  */
-router.get('/:usuarioId',authenticateToken ,controller.readUsuario);
+router.get('/:usuarioId' ,controller.readUsuario);
 
 /**
  * @openapi
@@ -112,7 +121,7 @@ router.get('/:usuarioId',authenticateToken ,controller.readUsuario);
  *       200:
  *         description: OK
  */
-router.get('/',authenticateToken, controller.readAll);
+router.get('/', controller.readAll);
 
 /**
  * @openapi
@@ -143,7 +152,7 @@ router.get('/',authenticateToken, controller.readAll);
  *       422:
  *         description: Validación fallida (Joi)
  */
-router.put('/:usuarioId',authenticateToken, ValidateJoi(Schemas.usuario.update), controller.updateUsuario);
+router.put('/:usuarioId',authenticateToken, authorizeRoles('admin'), ValidateJoi(Schemas.usuario.update), controller.updateUsuario);
 
 /**
  * @openapi
@@ -166,6 +175,6 @@ router.put('/:usuarioId',authenticateToken, ValidateJoi(Schemas.usuario.update),
  *       404:
  *         description: No encontrado
  */
-router.delete('/:usuarioId',authenticateToken, controller.deleteUsuario);
+router.delete('/:usuarioId',authenticateToken, authorizeRoles('admin'), controller.deleteUsuario);
 
 export default router;

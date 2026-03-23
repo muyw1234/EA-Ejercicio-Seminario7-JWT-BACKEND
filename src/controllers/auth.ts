@@ -28,6 +28,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
                 _id: usuario._id,
                 name: usuario.name,
                 email: usuario.email,
+                rol: usuario.rol,
                 organizacion: usuario.organizacion
             }
         });

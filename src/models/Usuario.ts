@@ -7,6 +7,7 @@ export interface IUsuario {
     email: string;
     password: string;
     organizacion: mongoose.Types.ObjectId | string;
+    rol: 'admin' | 'user';
 }
 
 export interface IUsuarioModel extends IUsuario, Document {}
@@ -16,7 +17,8 @@ const UsuarioSchema: Schema = new Schema(
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        organizacion: { type: Schema.Types.ObjectId, required: true, ref: 'Organizacion' }
+        organizacion: { type: Schema.Types.ObjectId, required: true, ref: 'Organizacion' }, 
+        rol: { type: String, enum: ['admin', 'user'], default: 'user' }
     },
     {
         timestamps: true,

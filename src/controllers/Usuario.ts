@@ -39,9 +39,11 @@ const readAll = async (req: Request, res: Response, next: NextFunction) => {
 const updateUsuario = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const usuarioId = req.params.usuarioId;
 
-    // Protección de recurso: solo puedes actualizarte a ti mismo
-    if (req.user?.id !== usuarioId) {
-        return res.status(403).json({ message: 'No tienes permiso para actualizar a otro usuario' });
+    const isAdmin = req.user?.rol === 'admin';
+    const isOwner = req.user?.id === usuarioId;
+
+    if (!isAdmin && !isOwner) {
+        return res.status(403).json({ message: 'No tienes permiso para actualizar este usuario' });
     }
 
     try {
@@ -57,13 +59,16 @@ const deleteUsuario = async (req: AuthRequest, res: Response, next: NextFunction
     const usuarioId = req.params.usuarioId;
 
     // Protección de recurso: solo puedes borrarte a ti mismo
-    if (req.user?.id !== usuarioId) {
-        return res.status(403).json({ message: 'No tienes permiso para borrar a otro usuario' });
+    const isAdmin = req.user?.rol === 'admin';
+    const isOwner = req.user?.id === usuarioId;
+
+    if (!isAdmin && !isOwner) {
+        return res.status(403).json({ message: 'No tienes permiso para borrar este usuario' });
     }
 
     try {
         const usuario = await UsuarioService.deleteUsuario(usuarioId);
-        return usuario ? res.status(201).json(usuario) : res.status(404).json({ message: 'not found' });
+        return usuario ? res.status(200).json({ message: 'Usuario eliminado' }) : res.status(404).json({ message: 'not found' });
     } catch (error) {
         return res.status(500).json({ error });
     }

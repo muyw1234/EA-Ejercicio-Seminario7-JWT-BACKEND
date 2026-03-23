@@ -34,15 +34,16 @@ export const Schemas = {
                 .required(),
             name: Joi.string().required(),
             email: Joi.string().email().required(),
-            password: Joi.string().min(6).required()
-        }),
+            password: Joi.string().min(6).required(),
+            rol: Joi.string().valid('admin', 'user').required()}),
         update: Joi.object<IUsuario>({
             organizacion: Joi.string()
                 .regex(/^[0-9a-fA-F]{24}$/)
                 .required(),
             name: Joi.string().required(),
             email: Joi.string().email().required(),
-            password: Joi.string().min(6).required()
+            password: Joi.string().min(6).required(),
+            rol: Joi.string().valid('admin', 'user').required()
         })
     }
 };
